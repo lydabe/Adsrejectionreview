@@ -341,7 +341,6 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
             <div className="panel-header">
               <div>
                 <span className="file-name">{fileName}</span>
-                <span className="file-meta">20.94 sec · US delivery</span>
               </div>
               <div className="legend">
                 <span>
