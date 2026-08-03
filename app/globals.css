@@ -1729,6 +1729,10 @@ button {
   box-shadow: none;
 }
 
+.policy-detail-card .issue-card {
+  border-bottom: 0;
+}
+
 .issues-heading {
   height: 82px;
   padding: 16px 20px;
