@@ -194,7 +194,7 @@ function AppHeader() {
         <input type="search" aria-label="Search pages, tools, or help articles" placeholder="Search pages, tools, or help articles" />
       </label>
       <div className="top-actions">
-        <button className="account-select" aria-label="Select advertising account">Sweetyellow <span>⌄</span></button>
+        <button className="account-select" aria-label="Select advertising account">ZerooGravity <span>⌄</span></button>
         <button className="icon-button" aria-label="Notifications"><span className="bell" /></button>
         <button className="icon-button help-icon" aria-label="Help">?</button>
       </div>
@@ -207,7 +207,7 @@ function AppSidebar({ active }: { active: "campaigns" | "assets" }) {
     <aside className="side-nav" aria-label="Primary navigation">
       <button className="nav-icon" aria-label="Overview"><SidebarIcon icon="home" /></button>
       <button className={`nav-icon${active === "campaigns" ? " active" : ""}`} aria-label="Campaigns"><SidebarIcon icon="campaigns" /></button>
-      <button className={`nav-icon${active === "assets" ? " active" : ""}`} aria-label="Ad Rejection Insights"><SidebarIcon icon="assets" /></button>
+      <button className={`nav-icon${active === "assets" ? " active" : ""}`} aria-label="Assets"><SidebarIcon icon="assets" /></button>
       <button className="nav-icon" aria-label="Audience"><SidebarIcon icon="audience" /></button>
       <button className="nav-icon" aria-label="More tools"><SidebarIcon icon="more" /></button>
       <button className="nav-icon nav-collapse" aria-label="Collapse sidebar"><SidebarCollapseIcon /></button>
@@ -237,6 +237,8 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
     () => issues.find((issue) => issue.id === selectedId) ?? issues[0],
     [selectedId],
   );
+
+  const focusMaskId = `issue-focus-mask-${selected.id}`;
 
   useEffect(() => {
     if (!isPlaying || uploadedVideo) return;
@@ -298,7 +300,7 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
   return (
     <main className="app-shell">
       <AppHeader />
-      <AppSidebar active="assets" />
+      <AppSidebar active="campaigns" />
 
       <section className="page">
         <div className="page-heading">
@@ -369,17 +371,59 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
                   aria-label="Uploaded ad video"
                 />
 
+                <svg
+                  className="issue-focus-mask"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <mask
+                      id={focusMaskId}
+                      maskUnits="userSpaceOnUse"
+                      maskContentUnits="userSpaceOnUse"
+                    >
+                      <rect x="0" y="0" width="100" height="100" fill="white" />
+                      {frameAnnotations[selected.id].map((annotation) => (
+                        <rect
+                          key={annotation.label}
+                          x={Number.parseFloat(annotation.position.left)}
+                          y={Number.parseFloat(annotation.position.top)}
+                          width={Number.parseFloat(annotation.position.width)}
+                          height={Number.parseFloat(annotation.position.height)}
+                          fill="black"
+                        />
+                      ))}
+                    </mask>
+                  </defs>
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100"
+                    height="100"
+                    fill="#121415"
+                    fillOpacity="0.4"
+                    mask={`url(#${focusMaskId})`}
+                  />
+                </svg>
+
                 {!isAnalyzing && frameAnnotations[selected.id].map((annotation, index) => (
                   <button
                     key={annotation.label}
-                    className={`element-annotation ${annotation.risk === "HIGH" ? "high" : "medium"}`}
+                    className={`element-annotation ${annotation.risk === "HIGH" ? "high" : "medium"} ${
+                      Number.parseFloat(annotation.position.left) +
+                        Number.parseFloat(annotation.position.width) >
+                      80
+                        ? "annotation-align-right"
+                        : ""
+                    }`}
                     style={annotation.position}
                     onClick={() => jumpTo(selected)}
-                    aria-label={`${annotation.label}, ${annotation.risk} risk`}
+                    aria-label={`${selected.shortTitle}: ${annotation.label}, ${annotation.risk} risk`}
                   >
                     <span className="annotation-tag">
                       <b>△</b>
-                      <strong>{annotation.label}</strong>
+                      <strong>{selected.shortTitle}</strong>
                       <em>{annotation.risk}</em>
                     </span>
                     <span className="annotation-index">{index + 1}</span>
@@ -453,9 +497,7 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
                     )}`}
                   >
                     <span className="range-number">{issue.id}</span>
-                    <span className="range-name">
-                      {issue.id === 1 ? "Casino gameplay" : issue.id === 2 ? "Reward value" : "Missing terms"}
-                    </span>
+                    <span className="range-name">{issue.shortTitle}</span>
                   </button>
                 ))}
                 <div className="tick-labels">
