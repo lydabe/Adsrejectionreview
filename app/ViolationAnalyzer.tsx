@@ -650,7 +650,7 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
               another review of this decision.
             </p>
             <button className="button secondary" onClick={() => setDrawer("appeal")}>
-              Appeal decision
+              Appeal
             </button>
           </div>
         </aside>
