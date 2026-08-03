@@ -1757,20 +1757,6 @@ button {
   text-transform: uppercase;
 }
 
-.issues-heading .count-badge {
-  margin-left: auto;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--ks-neutral-150) !important;
-  background: var(--ks-neutral-975);
-  line-height: 1;
-  font-weight: 500;
-}
-
 .issue-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

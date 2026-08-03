@@ -518,9 +518,8 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
             <div className="issues-heading">
               <div>
                 <span className="issues-label">Issues</span>
-                <h2>Policy concerns</h2>
+                <h2>3 policy concerns</h2>
               </div>
-              <span className="count-badge">3</span>
             </div>
 
             <div className="issue-list">
