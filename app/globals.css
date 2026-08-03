@@ -1060,12 +1060,16 @@ button {
   display: grid;
   grid-template-columns: minmax(330px, 0.38fr) minmax(0, 1fr);
   align-items: start;
-  gap: 16px;
+  column-gap: 16px;
+  row-gap: 8px;
 }
 
 .viewer-card {
   min-width: 0;
   grid-row: span 2;
+  position: sticky;
+  top: 72px;
+  align-self: start;
   overflow: hidden;
   border: 1px solid var(--ks-neutral-900);
   border-radius: var(--ks-radius-xl);
@@ -1136,7 +1140,7 @@ button {
 }
 
 .stage-wrap {
-  height: clamp(500px, calc(100vh - 310px), 730px);
+  height: clamp(280px, calc(100vh - 360px), 520px);
   display: grid;
   place-items: center;
   padding: 0;
@@ -1530,8 +1534,8 @@ button {
 }
 
 .timeline-section {
-  height: 176px;
-  padding: 10px 16px 18px;
+  height: 144px;
+  padding: 8px 16px 12px;
   border-top: 1px solid var(--ks-neutral-900);
 }
 
@@ -1911,13 +1915,13 @@ button {
 
 .explanation-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1.1fr) minmax(230px, 0.9fr);
 }
 
 .reason-column,
 .fix-column,
 .resolution-actions {
-  padding: 22px;
+  padding: 16px 18px;
 }
 
 .reason-column,
@@ -1930,7 +1934,8 @@ button {
 }
 
 .fix-column {
-  border-top: 1px solid var(--ks-neutral-900);
+  border-top: 0;
+  border-left: 1px solid var(--ks-neutral-900);
 }
 
 .resolution-actions {
@@ -2171,6 +2176,7 @@ button {
 
   .viewer-card {
     grid-row: auto;
+    position: static;
     border-right: 0;
   }
 
@@ -2293,6 +2299,7 @@ button {
   .reason-column,
   .fix-column {
     border-right: 0;
+    border-left: 0;
     border-bottom: 1px solid var(--ks-neutral-900);
   }
 
