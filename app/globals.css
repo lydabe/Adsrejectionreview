@@ -1910,12 +1910,16 @@ button {
 }
 
 .explanation-eyebrow {
-  display: none;
+  display: block;
+  margin-bottom: 2px;
+  color: var(--ks-neutral-450);
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .explanation-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(230px, 0.9fr);
+  grid-template-columns: 1fr;
 }
 
 .reason-column,
@@ -1934,8 +1938,8 @@ button {
 }
 
 .fix-column {
-  border-top: 0;
-  border-left: 1px solid var(--ks-neutral-900);
+  border-top: 1px solid var(--ks-neutral-900);
+  border-left: 0;
 }
 
 .resolution-actions {
