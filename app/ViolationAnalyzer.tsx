@@ -7,6 +7,7 @@ type Issue = {
   time: number;
   end: number;
   severity: "Violation" | "Needs review";
+  shortTitle: string;
   title: string;
   policy: string;
   reason: string;
@@ -21,10 +22,11 @@ const issues: Issue[] = [
     time: 0.6,
     end: 15.2,
     severity: "Violation",
+    shortTitle: "Casino disclosure",
     title: "Social casino gameplay is not clearly disclosed",
     policy: "Gambling and Games · Social casino games",
     reason:
-      "The creative prominently shows simulated slot-machine gameplay. For US delivery, social casino ads must be approved by TikTok, remain free-to-play with no money-out option, and clearly communicate that players cannot win real money or anything with real-world value.",
+      "Casino-style gameplay is prominent, but the creative does not make the free-to-play, no-cash nature of the game clear.",
     detected: "Slot reels, jackpot totals, “BUY,” and casino-style game controls",
     fix: [
       "Add a persistent, readable disclosure: “No real-money gambling. No cash or real-world prizes.”",
@@ -38,10 +40,11 @@ const issues: Issue[] = [
     time: 4.1,
     end: 18.4,
     severity: "Violation",
+    shortTitle: "Reward value",
     title: "Rewards may be interpreted as real-world value",
     policy: "Gambling and Games · Financial rewards",
     reason:
-      "Large jackpot figures, coin balances, purchase controls, and winning reactions can imply that rewards have cash or real-world value. US social casino ads must make the absence of real-money winnings unmistakable.",
+      "Large jackpot figures and winning reactions can suggest real-world value. Make it unmistakable that all rewards are virtual only.",
     detected: "Large coin totals, “GRAND / MAJOR” jackpots, and celebratory win visuals",
     fix: [
       "Avoid dollar symbols, cash imagery, or language such as “cash out,” “earn,” or “win money.”",
@@ -55,10 +58,11 @@ const issues: Issue[] = [
     time: 12.6,
     end: 20.2,
     severity: "Needs review",
+    shortTitle: "US eligibility",
     title: "Required US eligibility and safety context is missing",
     policy: "Gambling and Games · US market requirements",
     reason:
-      "The closing frames do not provide clear eligibility, age, responsible-play, or promotion terms. TikTok requires market eligibility and encourages clear warnings, legally required taglines, and transparent terms.",
+      "The end card omits clear US eligibility, age, and responsible-play context needed for this type of creative.",
     detected: "End card does not show age, eligibility, responsible-play, or offer terms",
     fix: [
       "Add the applicable age requirement and “Play responsibly” to the end card.",
@@ -96,15 +100,128 @@ function formatTime(time: number) {
   return `00:${Math.floor(time).toString().padStart(2, "0")}`;
 }
 
+function SidebarIcon({ icon }: { icon: "home" | "campaigns" | "assets" | "audience" | "more" }) {
+  const shared = { width: 40, height: 40, viewBox: "0 0 40 40", fill: "none", "aria-hidden": true };
+  const tile = (
+    <path
+      d="M0 6.4C0 4.1598 0 3.0397.436 2.184.819 1.431 1.431.819 2.184.436 3.04 0 4.16 0 6.4 0h27.2C35.84 0 36.96 0 37.816.436c.753.383 1.365.995 1.748 1.748C40 3.04 40 4.16 40 6.4v27.2c0 2.24 0 3.36-.436 4.216a4 4 0 0 1-1.748 1.748C36.96 40 35.84 40 33.6 40H6.4c-2.24 0-3.36 0-4.216-.436a4 4 0 0 1-1.748-1.748C0 36.96 0 35.84 0 33.6V6.4Z"
+      fill="white"
+    />
+  );
+
+  if (icon === "home") {
+    return (
+      <svg {...shared}>
+        {tile}
+        <g transform="translate(10 10)">
+          <path d="M12.809 13.375c.552 0 1 .448 1 1s-.448 1-1 1H7.505c-.552 0-1-.448-1-1s.448-1 1-1h5.304Z" fill="currentColor" />
+          <path fillRule="evenodd" clipRule="evenodd" d="M9.2 2.542a1.25 1.25 0 0 1 1.6 0l6.249 5.208c.285.237.45.589.45.96v8.165a1.25 1.25 0 0 1-1.25 1.25h-12.5a1.25 1.25 0 0 1-1.25-1.25V8.71c0-.37.165-.722.45-.96L9.2 2.542Zm-4.7 6.52v7.063h11V9.06L10 4.477 4.5 9.061Z" fill="currentColor" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (icon === "campaigns") {
+    return (
+      <svg {...shared}>
+        {tile}
+        <g transform="translate(10 10)">
+          <path fillRule="evenodd" clipRule="evenodd" d="M15.144 3.857a3 3 0 0 1 3 3v3.75a1 1 0 1 1-2 0V9.398H3.857v7.745a1 1 0 0 0 1 1h.386a1 1 0 1 1 0 2h-.386a3 3 0 0 1-3-3V6.857a3 3 0 0 1 3-3h10.287ZM4.857 5.857a1 1 0 0 0-1 1v.541h12.286v-.54a1 1 0 0 0-1-1H4.857Z" fill="currentColor" />
+          <path fillRule="evenodd" clipRule="evenodd" d="M14.265 11.756a1 1 0 0 1 .876.297c.744.776 1.234 1.6 1.39 2.57.152.949-.038 1.91-.405 2.924a1 1 0 0 1-.918.659l-5.098.11.085.204a1 1 0 0 1-1.844.774l-.698-1.66a2.3 2.3 0 0 1-.73-1.378c-.213-1.243.533-2.451 1.74-2.817l5.467-1.652.136-.03Zm-5.024 3.598a.46.46 0 0 0 .156.98l5.049-.11c.139-.529.165-.938.11-1.284a2.7 2.7 0 0 0-.475-1.049l-4.84 1.463Z" fill="currentColor" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (icon === "assets") {
+    return (
+      <svg {...shared}>
+        {tile}
+        <g transform="translate(10 10)">
+          <path d="M1.736 9.211c0-1.073 1.059-1.679 1.953-1.386l.177.07 4.814 2.311c.495.238.834.74.834 1.315v5.837c0 1.13-1.178 1.747-2.1 1.329L2.6 16.51a1.45 1.45 0 0 1-.864-1.329V9.21Zm14.398-1.317c.924-.444 2.13.17 2.13 1.315v5.971c0 .589-.354 1.098-.864 1.329l-4.815 2.178c-.922.418-2.1-.2-2.1-1.33V11.52c0-.576.339-1.078.834-1.315l4.815-2.311ZM3.736 14.828l3.778 1.71v-4.673l-3.778-1.813v4.776Zm8.749-2.965v4.674l3.779-1.71V10.05l-3.779 1.814ZM9.523 1.259a1.5 1.5 0 0 1 .969 0l.155.06 5.95 2.744c1.159.535 1.159 2.162 0 2.697l-5.95 2.744a1.5 1.5 0 0 1-1.279 0L3.42 6.76c-1.16-.535-1.16-2.162 0-2.697l5.948-2.744.155-.06ZM5.27 5.412l4.737 2.185 4.736-2.185-4.736-2.185L5.27 5.412Z" fill="currentColor" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (icon === "audience") {
+    return (
+    <svg {...shared}>
+      {tile}
+      <g transform="translate(10 10)">
+        <path fillRule="evenodd" clipRule="evenodd" d="M9.993.125a4.75 4.75 0 0 1 3.213 8.246 7 7 0 0 1 4.044 6.504 1 1 0 0 1-2 0A5.25 5.25 0 0 0 10 9.625a5.25 5.25 0 0 0-5.25 5.25 1 1 0 0 1-2 0 7 7 0 0 1 4.034-6.499A4.75 4.75 0 0 1 9.993.125Zm0 2a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Z" fill="currentColor" />
+      </g>
+    </svg>
+    );
+  }
+
+  return (
+    <svg {...shared}>
+      {tile}
+      <path d="M21.25 20c0 .69-.56 1.25-1.25 1.25s-1.25-.56-1.25-1.25.56-1.25 1.25-1.25 1.25.56 1.25 1.25ZM25.75 20c0 .69-.56 1.25-1.25 1.25s-1.25-.56-1.25-1.25.56-1.25 1.25-1.25 1.25.56 1.25 1.25ZM16.75 20c0 .69-.56 1.25-1.25 1.25s-1.25-.56-1.25-1.25.56-1.25 1.25-1.25 1.25.56 1.25 1.25Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function SidebarCollapseIcon() {
+  return (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <path d="M0 6.4C0 4.1598 0 3.0397.436 2.184.819 1.431 1.431.819 2.184.436 3.04 0 4.16 0 6.4 0h27.2C35.84 0 36.96 0 37.816.436c.753.383 1.365.995 1.748 1.748C40 3.04 40 4.16 40 6.4v27.2c0 2.24 0 3.36-.436 4.216a4 4 0 0 1-1.748 1.748C36.96 40 35.84 40 33.6 40H6.4c-2.24 0-3.36 0-4.216-.436a4 4 0 0 1-1.748-1.748C0 36.96 0 35.84 0 33.6V6.4Z" fill="white" />
+      <g transform="translate(0 -1024)" fill="#121415">
+        <path d="M37.5127 1049.25C38.065 1049.25 38.5127 1049.7 38.5127 1050.25C38.5126 1050.8 38.0649 1051.25 37.5127 1051.25H22.5127C21.9605 1051.25 21.5128 1050.8 21.5127 1050.25C21.5127 1049.7 21.9604 1049.25 22.5127 1049.25H37.5127Z" />
+        <path d="M37.5215 1042.38C38.0738 1042.38 38.5215 1042.82 38.5215 1043.38C38.5215 1043.93 38.0737 1044.38 37.5215 1044.38H28.7715C28.2193 1044.37 27.7715 1043.93 27.7715 1043.38C27.7715 1042.82 28.2193 1042.38 28.7715 1042.38H37.5215Z" />
+        <path d="M22.7139 1037.86C22.7142 1037.26 23.3574 1036.91 23.8125 1037.27L27.2432 1039.97C27.6161 1040.26 27.6159 1040.86 27.2432 1041.15L23.8125 1043.85C23.3573 1044.21 22.7139 1043.86 22.7139 1043.26V1037.86Z" />
+        <path d="M37.5215 1036.12C38.0738 1036.12 38.5215 1036.57 38.5215 1037.12C38.5215 1037.68 38.0738 1038.12 37.5215 1038.12H28.7715C28.2193 1038.12 27.7715 1037.68 27.7715 1037.12C27.7715 1036.57 28.2193 1036.13 28.7715 1036.12H37.5215Z" />
+      </g>
+    </svg>
+  );
+}
+
+function AppHeader() {
+  return (
+    <header className="topbar">
+      <div className="workspace-pill" aria-hidden="true">
+        <span className="grid-mark"><i /><i /><i /></span>
+        <span className="avatar">Y</span>
+      </div>
+      <img
+        className="topbar-logo"
+        src="./gmpt-logo.svg"
+        alt="TikTok Ads Manager"
+      />
+      <label className="top-search">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" aria-label="Search pages, tools, or help articles" placeholder="Search pages, tools, or help articles" />
+      </label>
+      <div className="top-actions">
+        <button className="account-select" aria-label="Select advertising account">Sweetyellow <span>⌄</span></button>
+        <button className="icon-button" aria-label="Notifications"><span className="bell" /></button>
+        <button className="icon-button help-icon" aria-label="Help">?</button>
+      </div>
+    </header>
+  );
+}
+
+function AppSidebar({ active }: { active: "campaigns" | "assets" }) {
+  return (
+    <aside className="side-nav" aria-label="Primary navigation">
+      <button className="nav-icon" aria-label="Overview"><SidebarIcon icon="home" /></button>
+      <button className={`nav-icon${active === "campaigns" ? " active" : ""}`} aria-label="Campaigns"><SidebarIcon icon="campaigns" /></button>
+      <button className={`nav-icon${active === "assets" ? " active" : ""}`} aria-label="Ad Rejection Insights"><SidebarIcon icon="assets" /></button>
+      <button className="nav-icon" aria-label="Audience"><SidebarIcon icon="audience" /></button>
+      <button className="nav-icon" aria-label="More tools"><SidebarIcon icon="more" /></button>
+      <button className="nav-icon nav-collapse" aria-label="Collapse sidebar"><SidebarCollapseIcon /></button>
+    </aside>
+  );
+}
+
 function ViolationDetail({ onBack }: { onBack: () => void }) {
-  const [selectedId, setSelectedId] = useState(1);
-  const [currentTime, setCurrentTime] = useState(0.6);
+  const [selectedId, setSelectedId] = useState(2);
+  const [currentTime, setCurrentTime] = useState(4.1);
   const [isPlaying, setIsPlaying] = useState(false);
   const uploadedVideo = "./ad-demo.mp4";
   const fileName = "20260729-133534.mp4";
   const isAnalyzing = false;
-  const [reviewed, setReviewed] = useState<number[]>([]);
-  const [copied, setCopied] = useState(false);
   const market = "US";
   const [drawer, setDrawer] = useState<"appeal" | "ai" | null>(null);
   const [aiGenerating, setAiGenerating] = useState(false);
@@ -136,12 +253,13 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
   }, [isPlaying, uploadedVideo]);
 
   useEffect(() => {
+    if (!isPlaying) return;
     const activeIssues = issues.filter(
       (issue) => currentTime >= issue.time && currentTime <= issue.end,
     );
     const selectedStillActive = activeIssues.some((issue) => issue.id === selectedId);
     if (!selectedStillActive && activeIssues[0]) setSelectedId(activeIssues[0].id);
-  }, [currentTime, selectedId]);
+  }, [currentTime, isPlaying, selectedId]);
 
   function jumpTo(issue: Issue) {
     setSelectedId(issue.id);
@@ -170,15 +288,6 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
     if (videoRef.current) videoRef.current.currentTime = nextTime;
   }
 
-  async function copyGuidance() {
-    const guidance = `${selected.title}\n\nWhy it was flagged:\n${selected.reason}\n\nHow to fix:\n${selected.fix
-      .map((step, index) => `${index + 1}. ${step}`)
-      .join("\n")}`;
-    await navigator.clipboard?.writeText(guidance);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
-  }
-
   function openAiFix() {
     setDrawer("ai");
     setAiGenerating(true);
@@ -188,47 +297,8 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
 
   return (
     <main className="app-shell">
-      <header className="topbar">
-        <div className="workspace-pill" aria-hidden="true">
-          <span className="grid-mark">
-            <i />
-            <i />
-            <i />
-            <i />
-          </span>
-          <span className="avatar">A</span>
-        </div>
-        <div className="brand-mark" aria-hidden="true">
-          <span />
-        </div>
-        <span className="product-name">TikTok Ads Manager</span>
-        <span className="header-divider" />
-        <span className="tool-name">Ad Rejection Insights</span>
-        <div className="top-actions">
-          <button className="icon-button" aria-label="Help">
-            ?
-          </button>
-          <button className="icon-button" aria-label="Notifications">
-            <span className="bell">♢</span>
-          </button>
-          <span className="account-chip">ACME</span>
-        </div>
-      </header>
-
-      <aside className="side-nav" aria-label="Primary navigation">
-        <button className="nav-icon" aria-label="Overview">
-          <span>⌂</span>
-        </button>
-        <button className="nav-icon active" aria-label="Campaigns">
-          <span>▤</span>
-        </button>
-        <button className="nav-icon" aria-label="Ad Rejection Insights">
-          <span>✓</span>
-        </button>
-        <button className="nav-icon" aria-label="Analytics">
-          <span>⌁</span>
-        </button>
-      </aside>
+      <AppHeader />
+      <AppSidebar active="assets" />
 
       <section className="page">
         <div className="page-heading">
@@ -264,12 +334,12 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
           </div>
         </div>
 
-        <div className="review-grid">
+        <div className="review-layout">
           <section className="viewer-card" aria-label="Video review">
             <div className="panel-header">
               <div>
                 <span className="file-name">{fileName}</span>
-                <span className="file-meta">20.94 sec · 360 × 640</span>
+                <span className="file-meta">20.94 sec · US delivery</span>
               </div>
               <div className="legend">
                 <span>
@@ -399,14 +469,15 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
             </div>
           </section>
 
+          <section
+            className={`policy-detail-card issue-${selected.id}`}
+            aria-label={`${selected.shortTitle} policy concern details`}
+          >
           <aside className="issues-panel" aria-label="Policy concerns">
             <div className="issues-heading">
               <div>
+                <span className="issues-label">Issues</span>
                 <h2>Policy concerns</h2>
-                <span>
-                  3 moments need your attention ·{" "}
-                  {market === "US" ? "United States" : market}
-                </span>
               </div>
               <span className="count-badge">3</span>
             </div>
@@ -436,14 +507,11 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
                             : "warning"
                         }`}
                       >
-                        {issue.severity}
+                        {issue.severity === "Violation" ? "Blocker" : "Review"}
                       </span>
                       <span>{formatTime(issue.time)}</span>
-                      {reviewed.includes(issue.id) && (
-                        <span className="reviewed-label">Reviewed</span>
-                      )}
                     </span>
-                    <strong>{issue.title}</strong>
+                    <strong>{issue.shortTitle}</strong>
                     <small>{issue.policy}</small>
                   </span>
                   <span className="chevron">›</span>
@@ -451,7 +519,6 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
               ))}
             </div>
           </aside>
-        </div>
 
         <section className="explanation-card" aria-live="polite">
           <div className="explanation-main">
@@ -470,20 +537,6 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
               </div>
               <h2>{selected.title}</h2>
             </div>
-            <button
-              className="button secondary compact"
-              onClick={() =>
-                setReviewed((items) =>
-                  items.includes(selected.id)
-                    ? items.filter((id) => id !== selected.id)
-                    : [...items, selected.id],
-                )
-              }
-            >
-              {reviewed.includes(selected.id)
-                ? "Mark as unresolved"
-                : "Mark as reviewed"}
-            </button>
             </div>
 
             <div className="explanation-grid">
@@ -501,20 +554,25 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
                     : "This prototype currently contains detailed US guidance. Verify the selected market’s latest requirements before submission."}
                 </p>
               </div>
-              <h3>Why this was flagged</h3>
-              <p>{selected.reason}</p>
               <div className="detected-quote">
                 <span>Detected in your ad</span>
                 <strong>“{selected.detected.replaceAll("“", "").replaceAll("”", "")}”</strong>
               </div>
-              <a
-                className="policy-link"
-                href="https://ads.tiktok.com/help/article/tiktok-ads-policy-gambling-and-games"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Read Gambling and Games policy <span>↗</span>
-              </a>
+              <h3>Why it matters</h3>
+              <p>{selected.reason}</p>
+              <div className="policy-meta">
+                <a
+                  className="policy-link"
+                  href="https://ads.tiktok.com/help/article/tiktok-ads-policy-gambling-and-games"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Read Gambling and Games policy <span>↗</span>
+                </a>
+                <span className="market-applied">
+                  Market applied: <strong>United States</strong>
+                </span>
+              </div>
             </div>
             <div className="fix-column">
               <h3>Recommended fix</h3>
@@ -526,40 +584,37 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
                   </li>
                 ))}
               </ol>
-              <div className="fix-actions">
-                <button className="button secondary" onClick={copyGuidance}>
-                  {copied ? "Guidance copied" : "Copy fix guidance"}
-                </button>
-              </div>
             </div>
             </div>
           </div>
-          <aside className="resolution-actions" aria-label="Resolution actions">
-              <div className="resolution-box ai">
-                <span className="resolution-icon">✦</span>
-                <div>
-                  <strong>AI video fix</strong>
-                  <p>
-                    Generate two complete video options that address all 3
-                    policy concerns.
-                  </p>
-                  <button className="button ai-button" onClick={openAiFix}>
-                    Generate video options
-                  </button>
-                </div>
-              </div>
-              <div className="resolution-box appeal-card">
-                <strong>Believe this is incorrect?</strong>
-                <p>
-                  An appeal does not change the original creative. It requests
-                  another review of this decision.
-                </p>
-                <button className="button secondary" onClick={() => setDrawer("appeal")}>
-                  Appeal decision
-                </button>
-              </div>
-          </aside>
         </section>
+        </section>
+        <aside className="resolution-actions" aria-label="Resolution actions">
+          <div className="resolution-box ai">
+            <span className="resolution-icon">✦</span>
+            <div>
+              <strong>AI video fix</strong>
+              <p>
+                Generate two complete video options that address all 3 policy
+                concerns.
+              </p>
+              <button className="button ai-button" onClick={openAiFix}>
+                Generate video options
+              </button>
+            </div>
+          </div>
+          <div className="resolution-box appeal-card">
+            <strong>Believe this is incorrect?</strong>
+            <p>
+              An appeal does not change the original creative. It requests
+              another review of this decision.
+            </p>
+            <button className="button secondary" onClick={() => setDrawer("appeal")}>
+              Appeal decision
+            </button>
+          </div>
+        </aside>
+        </div>
 
         <div className="bottom-note">
           <span>ⓘ</span>
@@ -857,47 +912,8 @@ function HierarchyView({
 
   return (
     <main className="app-shell">
-      <header className="topbar">
-        <div className="workspace-pill" aria-hidden="true">
-          <span className="grid-mark">
-            <i />
-            <i />
-            <i />
-            <i />
-          </span>
-          <span className="avatar">A</span>
-        </div>
-        <div className="brand-mark" aria-hidden="true">
-          <span />
-        </div>
-        <span className="product-name">TikTok Ads Manager</span>
-        <span className="header-divider" />
-        <span className="tool-name">Ad Rejection Insights</span>
-        <div className="top-actions">
-          <button className="icon-button" aria-label="Help">
-            ?
-          </button>
-          <button className="icon-button" aria-label="Notifications">
-            <span className="bell">♢</span>
-          </button>
-          <span className="account-chip">ACME</span>
-        </div>
-      </header>
-
-      <aside className="side-nav" aria-label="Primary navigation">
-        <button className="nav-icon" aria-label="Overview">
-          <span>⌂</span>
-        </button>
-        <button className="nav-icon active" aria-label="Campaigns">
-          <span>▤</span>
-        </button>
-        <button className="nav-icon" aria-label="Reports">
-          <span>✓</span>
-        </button>
-        <button className="nav-icon" aria-label="Analytics">
-          <span>⌁</span>
-        </button>
-      </aside>
+      <AppHeader />
+      <AppSidebar active="campaigns" />
 
       <section className="page hierarchy-page">
         <div className="hierarchy-breadcrumb" aria-label="Breadcrumb">
