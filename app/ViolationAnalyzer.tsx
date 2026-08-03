@@ -572,11 +572,11 @@ function ViolationDetail({ onBack }: { onBack: () => void }) {
               {selected.id}
             </span>
             <div>
+              <h2>{selected.title}</h2>
               <div className="explanation-eyebrow">
                 {formatTime(selected.time)}–{formatTime(selected.end)} ·{" "}
                 {selected.policy}
               </div>
-              <h2>{selected.title}</h2>
             </div>
             </div>
 
